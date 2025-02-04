@@ -3,11 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Gestión de Productos</title>
     <link rel="stylesheet" href="style.css">
-    
 </head>
 <body>
+    <div class="contenedor">
+        <h1>Lista de Productos</h1>
+
+        
+        <!-- Formulario para agregar productos -->
+        <div class="formulario">
+            <form id="form-agregar-producto">
+                <label>
+                    Título: <input type="text" id="titulo-producto" required>
+                </label>
+                <label>
+                    Categoría: <input type="text" id="categoria-producto" required>
+                </label>
+                <label>
+                    Precio: <input type="number" id="precio-producto" required>
+                </label>
+                <label>
+                    Tags (separados por comas): <input type="text" id="tags-producto">
+                </label>
+                <button type="submit" class="boton-primario">Crear Producto</button>
+            </form>
+        </div>
+
+        <div class="filtro">
+            <h2>Filtrar por categoría</h2>
+            <input type="text" id="filtro-categoria" placeholder="Escribe una categoría">
+        </div>
+        
+        <!-- Tabla para mostrar los productos -->
+        <table id="tabla-productos">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Título</th>
+                    <th>Categoría</th>
+                    <th>Precio</th>
+                    <th>Tags</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tbody-productos">
+                <!-- Aquí se llenarán los productos dinámicamente -->
+            </tbody>
+        </table>
+    </div>
+
+    
+    
+
     <script type="module" src="index.js"></script>
 </body>
 </html>
