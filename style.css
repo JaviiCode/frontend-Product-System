@@ -13,33 +13,36 @@ body {
 h1 {
     color: #333;
     margin-bottom: 20px;
+    text-align: center;
+    font-size: 24px;
 }
 
-.formulario {
-    margin: 20px auto;
+/* Contenedor de acciones (botón y filtro) */
+#acciones-tabla {
     display: flex;
-    flex-direction: column;
+    justify-content: space-evenly; /* Alinear filtro y botón a lados opuestos */
     align-items: center;
+    margin-bottom: 20px;
+    margin-left: 18%;
+    margin-right: 18%;;
+    padding: 0 10px; /* Espaciado lateral */
+    flex-wrap: wrap; /* Permitir ajuste en pantallas pequeñas */
 }
 
-.formulario form {
+#acciones-tabla .filtro {
+    flex: 1; /* El filtro ocupa el espacio necesario a la izquierda */
     display: flex;
-    flex-direction: column;
+    align-items: center;
     gap: 10px;
-    align-items: center;
 }
 
-label {
-    font-size: 14px;
+#acciones-tabla .boton-container {
+    display: flex;
+    justify-content: flex-end; /* Botón a la derecha */
+    flex: 1; /* El botón ocupa el espacio necesario a la derecha */
 }
 
-input {
-    width: 300px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
+/* Botón Añadir Producto */
 .boton-primario {
     background-color: rgb(128, 128, 128);
     color: white;
@@ -47,40 +50,57 @@ input {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    margin-top: 10px;
+    font-size: 14px;
 }
 
 .boton-primario:hover {
     background-color: #3a3f44;
 }
 
+/* Filtro */
+#acciones-tabla label {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+#acciones-tabla input {
+    width: 200px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Tabla */
+#tabla-contenedor {
+    width: 100%;
+    margin-top: 20px;
+}
 
 table {
     width: 100%;
-    max-width: 1200px; 
-    margin: 20px auto; 
+    max-width: 1200px;
+    margin: 0 auto;
     border-collapse: collapse;
     text-align: center;
 }
 
 th, td {
     border: 1px solid #ccc;
-    padding: 12px; 
+    padding: 12px;
     font-size: 14px;
 }
 
 thead th {
     background-color: #444;
     color: white;
-    font-size: 16px; 
+    font-size: 16px;
 }
-
 
 tbody tr:nth-child(odd) {
     background-color: #f9f9f9;
 }
 
-
+/* Botones dentro de la tabla */
 button.editar {
     background-color: white;
     color: black;
@@ -106,58 +126,3 @@ button.eliminar {
 button.eliminar:hover {
     background-color: #555;
 }
-/* Campos de entrada en modo edición */
-tr input {
-    width: 90%;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-/* Botones de guardar y cancelar */
-button.guardar {
-    background-color: #4caf50;
-    color: white;
-    padding: 5px 10px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-button.guardar:hover {
-    background-color: #45a049;
-}
-
-button.cancelar {
-    background-color: #f44336;
-    color: white;
-    padding: 5px 10px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-button.cancelar:hover {
-    background-color: #d32f2f;
-}
-.filtro {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    margin-bottom: 10px;
-    gap: 8px;
-}
-
-.filtro label {
-    font-size: 14px;
-    font-weight: bold;
-}
-
-.filtro input {
-    width: 200px;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-

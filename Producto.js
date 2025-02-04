@@ -114,7 +114,7 @@ export class Producto {
     
             // Actualizar el producto
             await this.actualizarProducto(producto.id, {
-                ...producto,
+                id: producto.id,
                 title: nuevoTitulo,
                 category: nuevaCategoria,
                 price: nuevoPrecio,
