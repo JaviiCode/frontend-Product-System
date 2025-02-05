@@ -1,4 +1,4 @@
-/* General */
+
 body {
     font-family: Arial, sans-serif;
     margin: 20px;
@@ -17,60 +17,53 @@ h1 {
     font-size: 24px;
 }
 
-/* Contenedor de acciones (botón y filtro) */
+
 #acciones-tabla {
     display: flex;
-    justify-content: space-evenly; /* Alinear filtro y botón a lados opuestos */
+    width: 100%;
+    max-width: 1200px;
     align-items: center;
-    margin-bottom: 20px;
-    margin-left: 18%;
-    margin-right: 18%;;
-    padding: 0 10px; /* Espaciado lateral */
-    flex-wrap: wrap; /* Permitir ajuste en pantallas pequeñas */
+    margin-bottom: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px;
+    border-radius: 8px;
+    justify-content: space-between;
 }
 
-#acciones-tabla .filtro {
-    flex: 1; /* El filtro ocupa el espacio necesario a la izquierda */
-    display: flex;
-    align-items: center;
-    gap: 10px;
+.filtro label {
+    font-weight: bold;
+    margin-right: 5px;
 }
 
-#acciones-tabla .boton-container {
-    display: flex;
-    justify-content: flex-end; /* Botón a la derecha */
-    flex: 1; /* El botón ocupa el espacio necesario a la derecha */
-}
-
-/* Botón Añadir Producto */
-.boton-primario {
-    background-color: rgb(128, 128, 128);
-    color: white;
-    padding: 10px 20px;
-    border: none;
+.filtro input {
+    padding: 8px;
+    border: 1px solid #ccc;
     border-radius: 5px;
+    max-width: 250px;
+}
+
+
+.boton-container {
+    text-align: left;
+    margin-top: 20px;
+}
+
+.boton-primario {
+    background-color: #494949;
+    color: white;
+    border: none;
+    padding: 5px 12px;
+    border-radius: 3px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 12px;
 }
 
 .boton-primario:hover {
-    background-color: #3a3f44;
+    background-color: #444;
 }
 
-/* Filtro */
-#acciones-tabla label {
-    font-size: 14px;
-    font-weight: bold;
-}
 
-#acciones-tabla input {
-    width: 200px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-/* Tabla */
 #tabla-contenedor {
     width: 100%;
     margin-top: 20px;
@@ -100,7 +93,7 @@ tbody tr:nth-child(odd) {
     background-color: #f9f9f9;
 }
 
-/* Botones dentro de la tabla */
+
 button.editar {
     background-color: white;
     color: black;
@@ -125,4 +118,127 @@ button.eliminar {
 
 button.eliminar:hover {
     background-color: #555;
+}
+
+.carrito {
+    background-color: rgb(90, 90, 90);
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.carrito:hover {
+    background-color: #5a6268;
+}
+
+tr input {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+
+.guardar, .cancelar {
+    padding: 5px 10px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+
+.guardar {
+    background-color: white;
+    color: black;
+}
+
+.guardar:hover {
+    background-color: #ddd;
+}
+
+
+.cancelar {
+    background-color: rgb(90, 90, 90);
+    color: white;
+    margin-left: 5px;
+}
+
+.cancelar:hover {
+    background-color: #5a6268;
+}
+
+#formulario-producto {
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+#formulario-producto h1 {
+    font-size: 18px;
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+#form-agregar-producto {
+    display: flex;
+    flex-direction: column;
+}
+
+#form-agregar-producto label {
+    margin-bottom: 8px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+#form-agregar-producto input {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 100%;
+}
+
+.boton-primario, .boton-secundario {
+    padding: 12px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    text-align: center;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+
+.mensaje-container {
+    display: none;
+    position: fixed;
+    top: 20px;
+    left: 90%;
+    transform: translateX(-50%);
+    background-color: #5a5c5a; 
+    color: white;
+    padding: 15px 30px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    animation: fadeIn 0.5s, fadeOut 0.5s 2.5s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
 }

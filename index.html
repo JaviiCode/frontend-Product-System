@@ -1,31 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Productos</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div id="contenedor-principal">
-        <!-- Título -->
+
         <h1>Lista de Productos</h1>
-    
-        <!-- Contenedor de acciones (filtro a la izquierda, botón a la derecha) -->
+
+        <div id="mensaje-container" class="mensaje-container">
+            <span id="mensaje-texto"></span>
+        </div>
+
         <div id="acciones-tabla">
-            <!-- Filtro -->
+
             <div class="filtro">
                 <label for="filtro-categoria">Filtrar por categoría:</label>
                 <input type="text" id="filtro-categoria" placeholder="Escribe una categoría...">
             </div>
-    
-            <!-- Botón Añadir Producto -->
+
             <div class="boton-container">
                 <button id="btn-agregar-producto" class="boton-primario">Añadir Producto</button>
+                <button id="btn-ir-carrito" class="boton-primario" onclick="window.location.href='carrito.html';">Ir a Carrito</button>
             </div>
+
         </div>
-    
-        <!-- Tabla de productos -->
+
+
         <div id="tabla-contenedor">
             <table id="tabla-productos">
                 <thead>
@@ -39,12 +45,15 @@
                     </tr>
                 </thead>
                 <tbody id="tbody-productos">
-                    <!-- Se cargará dinámicamente -->
+
                 </tbody>
             </table>
         </div>
     </div>
-    
+
+
+
     <script type="module" src="index.js"></script>
 </body>
+
 </html>
