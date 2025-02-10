@@ -52,22 +52,27 @@ export class Carrito {
     }
 
     //añade el producto al carrito y si existe lo incremente
-    async añadirProducto(id){
+    async añadirProducto(id, cantidad = 1) { 
         let existeProducto = false;
-        for(let producto of this.productos){
-            if(producto.id == id){
-                producto.unidadesCarrito++;
+    
+        for (let producto of this.productos) {
+            if (producto.id == id) {
+                producto.unidadesCarrito += cantidad; // Suma la cantidad especificada
                 existeProducto = true;
             }
         }
-        if(existeProducto == false){
+    
+        if (!existeProducto) {
             let producto = await this.buscarProducto(id);
-            producto.unidadesCarrito = 1;
+            producto.unidadesCarrito = cantidad; // Asigna la cantidad especificada
             this.productos.push(producto);
         }
+    
         let carritoString = this.generarString();
-        document.cookie = "carrito="+carritoString;
+        document.cookie = "carrito=" + carritoString;
     }
+
+
 
     //genera una sintr del carrito con sus productos
     generarString(){
@@ -80,25 +85,30 @@ export class Carrito {
     //mostrar productos con html
     mostrarProductos() {
         const tbody = document.querySelector('#tbody-carrito');
-        if(!tbody){
-            return false
+        if (!tbody) {
+            return false;
         }
         tbody.innerHTML = '';
-
-        for(let producto of this.productos){
+    
+        for (let producto of this.productos) {
             const fila = document.createElement('tr');
             fila.setAttribute('data-id', producto.id);
-
+    
             fila.innerHTML = `
                 <td>${producto.id}</td>
                 <td>${producto.title}</td>
                 <td>$${producto.price}</td>
                 <td>${producto.unidadesCarrito}</td>
                 <td>
-                    <button class="eliminar" id="eliminar-btn_${producto.id}"data-id="${producto.id}">Eliminar</button>
+                    <input type="number" id="cantidad-eliminar-${producto.id}" 
+                           class="cantidad-eliminar" min="1" max="${producto.unidadesCarrito}" 
+                           value="1" style="width: 60px;" />
+                    <button class="eliminar" id="eliminar-btn_${producto.id}" data-id="${producto.id}">
+                        Eliminar
+                    </button>
                 </td>
             `;
-
+    
             tbody.appendChild(fila);
         }
         this.agregarEventosBotones();
@@ -106,29 +116,42 @@ export class Carrito {
 
     //funcion de eventos.
     agregarEventosBotones() {
-        document.querySelectorAll('.eliminar').forEach(btn => {
-            btn.addEventListener('click', async (e) => {
-                let productoid= e.target.id.split("_")[1];
-                this.borrarProducto(productoid);
+        const botonesEliminar = document.querySelectorAll('.eliminar');
+    
+        botonesEliminar.forEach((boton) => {
+            boton.addEventListener('click', (e) => {
+                const id = boton.getAttribute('data-id');
+                const inputCantidad = document.querySelector(`#cantidad-eliminar-${id}`);
+                const cantidadEliminar = parseInt(inputCantidad.value, 10) || 1;
+    
+                this.borrarProducto(id, cantidadEliminar);
             });
         });
     }
+    
 
     //borra o reduce el producto
-    borrarProducto(id){
+    borrarProducto(id, cantidadEliminar = 1) {
         let productosModificados = [];
-        for(let producto of this.productos){
-            if(producto.id == id){
-                if(producto.unidadesCarrito > 1){
-                    producto.unidadesCarrito--
+    
+        for (let producto of this.productos) {
+            if (producto.id == id) {
+                // Reducir la cantidad solo si es mayor o igual a la cantidad a eliminar
+                if (producto.unidadesCarrito > cantidadEliminar) {
+                    producto.unidadesCarrito -= cantidadEliminar;
                     productosModificados.push(producto);
+                } else if (producto.unidadesCarrito <= cantidadEliminar) {
+                    // Si las unidades a eliminar son iguales o mayores, elimina el producto
+                    continue;
                 }
-            }else{
+            } else {
                 productosModificados.push(producto);
             }
-        }this.productos = productosModificados;
+        }
+    
+        this.productos = productosModificados;
         this.mostrarProductos();
-        document.cookie="carrito="+this.generarString()
+        document.cookie = "carrito=" + this.generarString();
     }
 }
 const carrito = new Carrito();

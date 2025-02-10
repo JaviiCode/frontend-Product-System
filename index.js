@@ -22,7 +22,9 @@ function mostrarFormularioAgregarProducto() {
     tablaContenedor.style.display = 'none';
 
     const accionesTabla = document.getElementById('acciones-tabla');
-    accionesTabla.classList.add('hidden');  
+    if (accionesTabla) {
+        accionesTabla.remove(); // Eliminar el div de acciones de la tabla
+    }
 
     const formularioExistente = document.getElementById('formulario-producto');
     if (formularioExistente) {
@@ -58,17 +60,50 @@ function mostrarFormularioAgregarProducto() {
 
         document.getElementById('formulario-producto').remove();
         tablaContenedor.style.display = 'block';
-        accionesTabla.classList.remove('hidden');
+
+        // Volver a mostrar las acciones si es necesario (puedes agregarlo si es parte de tu lógica).
+        const accionesTablaHTML = `
+            <div id="acciones-tabla">
+                <div class="filtro">
+                    <label for="filtro-categoria">Filtrar por categoría:</label>
+                    <input type="text" id="filtro-categoria" placeholder="Escribe una categoría...">
+                </div>
+                <div class="boton-container">
+                    <button id="btn-agregar-producto" class="boton-primario">Añadir Producto</button>
+                    <button id="btn-ir-carrito" class="boton-primario" onclick="window.location.href='carrito.html';">Ir a Carrito</button>
+                </div>
+            </div>
+        `;
+        document.getElementById('contenedor-principal').insertAdjacentHTML('afterbegin', accionesTablaHTML);
+
         producto.obtenerProductos();
+        inicializarEventos(); // Reinicializar eventos
     });
 
     const btnCancelar = document.getElementById('btn-cancelar');
     btnCancelar.addEventListener('click', () => {
         document.getElementById('formulario-producto').remove();
         tablaContenedor.style.display = 'block';
-        accionesTabla.classList.remove('hidden');
+        
+        // Restaurar las acciones si fueron eliminadas
+        const accionesTablaHTML = `
+            <div id="acciones-tabla">
+                <div class="filtro">
+                    <label for="filtro-categoria">Filtrar por categoría:</label>
+                    <input type="text" id="filtro-categoria" placeholder="Escribe una categoría...">
+                </div>
+                <div class="boton-container">
+                    <button id="btn-agregar-producto" class="boton-primario">Añadir Producto</button>
+                    <button id="btn-ir-carrito" class="boton-primario" onclick="window.location.href='carrito.html';">Ir a Carrito</button>
+                </div>
+            </div>
+        `;
+        document.getElementById('contenedor-principal').insertAdjacentHTML('afterbegin', accionesTablaHTML);
+
+        inicializarEventos(); // Reinicializar eventos
     });
 }
+
 
 
 
