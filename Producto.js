@@ -18,6 +18,17 @@ export class Producto {
         }
     }
 
+    async obtenerCategorias() {
+        try {
+            const respuesta = await fetch('https://dummyjson.com/products/categories');
+            const categorias = await respuesta.json();
+            return categorias; // Devuelve la lista de categorías
+        } catch (error) {
+            console.error('Error al obtener categorías:', error);
+            return [];
+        }
+    }
+
     //Funcion para recorrer el array e insertarlo en la tabla de manera dinamica metiendole un atributo data-id por cada uno de los productos para identificarlos mejor en el resto del codigo.
     mostrarProductos() {
         
@@ -88,75 +99,88 @@ export class Producto {
     }
 
     // metodo para cuando le de al boton de editar se edite en la propia fila
-    async activarEdicionEnFila(fila, producto) {
-        const contenidoOriginal = fila.innerHTML;
+   async activarEdicionEnFila(fila, producto) {
+    const contenidoOriginal = fila.innerHTML;
+
+
+    const categorias = await this.obtenerCategorias();
+    const categoriaOptions = categorias.map(cat => 
+        `<option value="${cat.name}" ${cat.name === producto.category ? "selected" : ""}>${cat.name}</option>`
+    ).join('');
+
     
-        fila.innerHTML = `
-            <td>${producto.id}</td>
-            <td><input type="text" id="edit-title" value="${producto.title}"></td>
-            <td><input type="text" id="edit-category" value="${producto.category}"></td>
-            <td><input type="number" id="edit-price" value="${producto.price}"></td>
-            <td><input type="text" id="edit-tags" value="${producto.tags ? producto.tags.join(', ') : ''}"></td>
-            <td>
-                <button class="guardar">Guardar</button>
-                <button class="cancelar">Cancelar</button>
-            </td>
-        `;
-        fila.querySelector('.guardar').addEventListener('click', async () => {
-            const nuevoTitulo = fila.querySelector('#edit-title').value;
-            const nuevaCategoria = fila.querySelector('#edit-category').value;
-            const nuevoPrecio = parseFloat(fila.querySelector('#edit-price').value);
-            const nuevosTags = fila.querySelector('#edit-tags').value.split(',').map(tag => tag.trim());
-    
-            for (let p of this.productos) {
-                if (p.id !== producto.id && p.title.toLowerCase() === nuevoTitulo.toLowerCase()) {
-                    this.mostrarMensaje('Ya existe un producto con este título.', 'error');
-                    return;
-                }
+    fila.innerHTML = `
+        <td>${producto.id}</td>
+        <td><input type="text" id="edit-title" value="${producto.title}"></td>
+        <td>
+            <select id="edit-category">
+                ${categoriaOptions}
+            </select>
+        </td>
+        <td><input type="number" id="edit-price" value="${producto.price}"></td>
+        <td><input type="text" id="edit-tags" value="${producto.tags ? producto.tags.join(', ') : ''}"></td>
+        <td>
+            <button class="guardar">Guardar</button>
+            <button class="cancelar">Cancelar</button>
+        </td>
+    `;
+
+    // Evento para guardar cambios
+    fila.querySelector('.guardar').addEventListener('click', async () => {
+        const nuevoTitulo = fila.querySelector('#edit-title').value;
+        const nuevaCategoria = fila.querySelector('#edit-category').value; // Obtener la categoría seleccionada
+        const nuevoPrecio = parseFloat(fila.querySelector('#edit-price').value);
+        const nuevosTags = fila.querySelector('#edit-tags').value.split(',').map(tag => tag.trim());
+
+        for (let p of this.productos) {
+            if (p.id !== producto.id && p.title.toLowerCase() === nuevoTitulo.toLowerCase()) {
+                this.mostrarMensaje('Ya existe un producto con este título.', 'error');
+                return;
             }
-    
-            const respuesta = await fetch(`https://dummyjson.com/products/${producto.id}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    title: nuevoTitulo,
-                    category: nuevaCategoria,
-                    price: nuevoPrecio,
-                    tags: nuevosTags,
-                }),
-            });
-    
-            if (respuesta.ok) {
-                producto.title = nuevoTitulo;
-                producto.category = nuevaCategoria;
-                producto.price = nuevoPrecio;
-                producto.tags = nuevosTags;
-    
-                fila.innerHTML = `
-                    <td>${producto.id}</td>
-                    <td>${producto.title}</td>
-                    <td>${producto.category}</td>
-                    <td>$${producto.price}</td>
-                    <td>${producto.tags ? producto.tags.join(', ') : 'N/A'}</td>
-                    <td>
-                        <button class="editar" data-id="${producto.id}">Editar</button>
-                        <button class="eliminar" data-id="${producto.id}">Eliminar</button>
-                        <button class="carrito" data-id="${producto.id}">Carrito</button>
-                    </td>
-                `;
-                this.mostrarMensaje('Producto Actualizado.', 'exito');
-                this.agregarEventosBotones();
-            } else {
-                this.mostrarMensaje('Producto NO Actualizado.', 'error');
-            }
+        }
+
+        const respuesta = await fetch(`https://dummyjson.com/products/${producto.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                title: nuevoTitulo,
+                category: nuevaCategoria,
+                price: nuevoPrecio,
+                tags: nuevosTags,
+            }),
         });
-    
-        // Evento para cancelar la edición y restaurar la fila original
-        fila.querySelector('.cancelar').addEventListener('click', () => {
-            fila.innerHTML = contenidoOriginal;
+
+        if (respuesta.ok) {
+            producto.title = nuevoTitulo;
+            producto.category = nuevaCategoria;
+            producto.price = nuevoPrecio;
+            producto.tags = nuevosTags;
+
+            fila.innerHTML = `
+                <td>${producto.id}</td>
+                <td>${producto.title}</td>
+                <td>${producto.category}</td>
+                <td>$${producto.price}</td>
+                <td>${producto.tags ? producto.tags.join(', ') : 'N/A'}</td>
+                <td>
+                    <button class="editar" data-id="${producto.id}">Editar</button>
+                    <button class="eliminar" data-id="${producto.id}">Eliminar</button>
+                    <button class="carrito" data-id="${producto.id}">Carrito</button>
+                </td>
+            `;
+            this.mostrarMensaje('Producto Actualizado.', 'exito');
             this.agregarEventosBotones();
-        });
-    }
+        } else {
+            this.mostrarMensaje('Producto NO Actualizado.', 'error');
+        }
+    });
+
+    // Evento para cancelar la edición y restaurar la fila original
+    fila.querySelector('.cancelar').addEventListener('click', () => {
+        fila.innerHTML = contenidoOriginal;
+        this.agregarEventosBotones();
+    });
+}
     
 
     //funcion para crear producto en la api
