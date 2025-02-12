@@ -65,6 +65,13 @@ export class Producto {
         let productoID = e.target.getAttribute('data-id');
         let inputCantidad = document.querySelector(`#cantidad-${productoID}`);
         let cantidad = parseInt(inputCantidad.value, 10) || 1; 
+
+        if (cantidad === "" || isNaN(cantidad) || parseInt(cantidad) <= 0) {
+            this.mostrarMensaje('La cantidad debe ser un número mayor que 0.', 'error');
+            return; 
+        }
+    
+    
     
         await this.carrito.añadirProducto(productoID, cantidad);
         console.log(await this.carrito.getCarrito());
@@ -131,12 +138,24 @@ export class Producto {
         const nuevaCategoria = fila.querySelector('#edit-category').value; // Obtener la categoría seleccionada
         const nuevoPrecio = parseFloat(fila.querySelector('#edit-price').value);
         const nuevosTags = fila.querySelector('#edit-tags').value.split(',').map(tag => tag.trim());
-
+        
         for (let p of this.productos) {
+            if (p.id === null || p.id === undefined || p.title === null || p.title === undefined || p.title.trim() === "") {
+                this.mostrarMensaje('El producto tiene un ID o título nulo o vacío', 'error');
+                return;
+            }
+
             if (p.id !== producto.id && p.title.toLowerCase() === nuevoTitulo.toLowerCase()) {
                 this.mostrarMensaje('Ya existe un producto con este título.', 'error');
                 return;
             }
+
+            if (p.price == "" || isNaN(p.price) || parseFloat(p.price) <= 0) {
+                this.mostrarMensaje('No puedes poner un precio en 0, vacío o negativo', 'error');
+                return;
+            }
+
+            
         }
 
         const respuesta = await fetch(`https://dummyjson.com/products/${producto.id}`, {
@@ -227,14 +246,13 @@ export class Producto {
             return titulo.includes(valorFiltro) || categoria.includes(valorFiltro) || tags.includes(valorFiltro);
         });
 
-        // Actualizamos la tabla con los productos filtrados
         this.mostrarProductosFiltrados(productosFiltrados);
     }
 
     // funcion para mostrar productos filtrados
     mostrarProductosFiltrados(productos) {
         const tbody = document.querySelector('#tbody-productos');
-        tbody.innerHTML = ''; // Limpiar la tabla antes de agregar los nuevos productos
+        tbody.innerHTML = ''; 
 
         productos.forEach((producto) => {
             const fila = document.createElement('tr');
@@ -260,18 +278,23 @@ export class Producto {
 
     //funcion para eliminar producto
     async eliminarProducto(id) {
-        const respuesta = await fetch(`https://dummyjson.com/products/${id}`, {
-            method: 'DELETE',
-        });
-
-        if (respuesta.ok) {
-            this.productos = this.productos.filter(producto => producto.id !== parseInt(id));
-            this.mostrarProductos();
-            this.mostrarMensaje('Producto Eliminado.', 'exito');
+        const confirmacion = window.confirm('¿Estás seguro de que deseas eliminar este producto?');
+        
+        if (confirmacion) {
+            const respuesta = await fetch(`https://dummyjson.com/products/${id}`, {
+                method: 'DELETE',
+            });
+    
+            if (respuesta.ok) {
+                this.productos = this.productos.filter(producto => producto.id !== parseInt(id));
+                this.mostrarProductos();
+                this.mostrarMensaje('Producto Eliminado.', 'exito');
+            } else {
+                this.mostrarMensaje('Producto NO Eliminado.', 'error');
+            }
         } else {
-            this.mostrarMensaje('Producto NO Eliminado.', 'error');
+            this.mostrarMensaje('La eliminación del producto fue cancelada.', 'info');
         }
-
     }
 
 //funcion de las alertas
