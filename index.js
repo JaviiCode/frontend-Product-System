@@ -86,6 +86,7 @@ async function mostrarFormularioAgregarProducto() {
         document.getElementById('formulario-producto').remove();
         tablaContenedor.style.display = 'block';
         inicializarEventos();
+       
     });
 }
 

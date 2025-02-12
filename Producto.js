@@ -165,6 +165,7 @@ export class Producto {
                 <td>
                     <button class="editar" data-id="${producto.id}">Editar</button>
                     <button class="eliminar" data-id="${producto.id}">Eliminar</button>
+                    <input type="number" id="cantidad-${producto.id}" value="1" min="1" style="width: 50px;" />
                     <button class="carrito" data-id="${producto.id}">Carrito</button>
                 </td>
             `;
